@@ -1,2 +1,0 @@
-import {NextResponse} from 'next/server'; import {ensureDb,sql} from '@/lib/db';
-export async function POST(req){try{await ensureDb();const b=await req.json();if(!b.name||!b.message)return NextResponse.json({error:'Nama dan ucapan wajib diisi'},{status:400});await sql`INSERT INTO wishes(name,attendance,message) VALUES(${b.name},${b.attendance||'Hadir'},${b.message})`;return NextResponse.json({ok:true})}catch(e){return NextResponse.json({error:e.message},{status:500})}}
