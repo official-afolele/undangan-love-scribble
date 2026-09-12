@@ -1,0 +1,3 @@
+import {NextResponse} from 'next/server'; import {ensureDb,sql} from '@/lib/db'; import {getSession} from '@/lib/auth';
+export async function GET(){if(!(await getSession()))return NextResponse.json({error:'Unauthorized'},{status:401});await ensureDb();return NextResponse.json({wishes:await sql`SELECT * FROM wishes ORDER BY id DESC`})}
+export async function DELETE(req){if(!(await getSession()))return NextResponse.json({error:'Unauthorized'},{status:401});await ensureDb();const id=new URL(req.url).searchParams.get('id');await sql`DELETE FROM wishes WHERE id=${id}`;return NextResponse.json({ok:true})}
