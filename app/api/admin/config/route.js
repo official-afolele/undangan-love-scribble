@@ -1,0 +1,3 @@
+import {NextResponse} from 'next/server'; import {ensureDb,sql} from '@/lib/db'; import {getSession} from '@/lib/auth';
+export async function GET(){if(!(await getSession()))return NextResponse.json({error:'Unauthorized'},{status:401});await ensureDb();const r=await sql`SELECT data FROM wedding_config WHERE id=1`;return NextResponse.json({config:r[0].data})}
+export async function PUT(req){if(!(await getSession()))return NextResponse.json({error:'Unauthorized'},{status:401});await ensureDb();const data=await req.json();await sql`UPDATE wedding_config SET data=${JSON.stringify(data)}::jsonb,updated_at=now() WHERE id=1`;return NextResponse.json({ok:true})}
